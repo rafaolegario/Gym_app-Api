@@ -1,7 +1,7 @@
 import request from 'supertest'
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
-import { prisma } from '@/http/controllers/users/lib/prisma'
 import { app } from '@/app'
+import { ClearTestDatabase } from '@/utils/tests/clear-test-database'
 
 describe('Register controller', () => {
   beforeAll(async () => {
@@ -9,9 +9,7 @@ describe('Register controller', () => {
   })
 
   beforeEach(async () => {
-    await prisma.$executeRaw`DELETE FROM "check_ins"`
-    await prisma.$executeRaw`DELETE FROM "gyms"`
-    await prisma.$executeRaw`DELETE FROM "users"`
+    await ClearTestDatabase()
   })
 
   afterAll(async () => {

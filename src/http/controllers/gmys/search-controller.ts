@@ -13,7 +13,7 @@ export async function SearchController(
 
   const { query, page } = SearchQuerySchema.parse(request.query)
   const searchService = MakeSearchGymService()
-  const searchGyms = await searchService.execute({ query, page })
+  const gyms = await searchService.execute({ query, page })
 
-  reply.status(200).send({ searchGyms })
+  reply.status(200).send(gyms)
 }
