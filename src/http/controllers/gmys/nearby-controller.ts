@@ -7,10 +7,10 @@ export async function FetchNearbyController(
   reply: FastifyReply,
 ) {
   const FetchNearbyQuerySchema = z.object({
-    userLatitude: z.number().refine((value) => {
+    userLatitude: z.coerce.number().refine((value) => {
       return Math.abs(value) <= 90
     }),
-    userLongitude: z.number().refine((value) => {
+    userLongitude: z.coerce.number().refine((value) => {
       return Math.abs(value) <= 180
     }),
   })
@@ -19,10 +19,10 @@ export async function FetchNearbyController(
     request.query,
   )
   const nearbyService = MakeFetchNearbyGymsService()
-  const nearbyGyms = await nearbyService.execute({
+  const gyms = await nearbyService.execute({
     userLatitude,
     userLongitude,
   })
 
-  reply.status(200).send({ nearbyGyms })
+  reply.status(200).send(gyms)
 }

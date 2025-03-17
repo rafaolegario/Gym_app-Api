@@ -1,15 +1,10 @@
 import request from 'supertest'
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { app } from '@/app'
-import { ClearTestDatabase } from '@/utils/tests/clear-test-database'
 
 describe('Authenticate controller', () => {
   beforeAll(async () => {
     await app.ready()
-  })
-
-  beforeEach(async () => {
-    await ClearTestDatabase()
   })
 
   afterAll(async () => {

@@ -1,31 +1,25 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { app } from '@/app'
 import request from 'supertest'
-import { ClearTestDatabase } from '@/utils/tests/clear-test-database'
 import { CreateAndAuthenticateUser } from '@/utils/tests/create-and-autenticate-user'
-// import { CreateGymUtils } from '@/utils/tests/create-gym'
 
-describe('Search gyms controller', () => {
+describe('Search nearby controller', () => {
   beforeAll(async () => {
     await app.ready()
-  })
-
-  beforeEach(async () => {
-    await ClearTestDatabase()
   })
 
   afterAll(async () => {
     await app.close()
   })
 
-  it.skip('should be able to search for gyms', async () => {
+  it('should be able to search nearby for gyms', async () => {
     const { token } = await CreateAndAuthenticateUser(app)
 
     await request(app.server)
       .post('/gyms')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        title: 'Fitness Gym',
+        title: 'nearby Gym',
         description: 'The best gym in the world',
         phone: '123456789',
         latitude: -22.0141078,
@@ -33,18 +27,20 @@ describe('Search gyms controller', () => {
       })
 
     const response = await request(app.server)
-      .get('/gyms/search')
+      .get('/gyms/nearby')
       .query({
-        query: 'Fitness',
+        userLatitude: -22.0141078,
+        userLongitude: -47.8524877,
       })
       .set('Authorization', `Bearer ${token}`)
       .send()
 
+    console.log(response.body)
     expect(response.statusCode).toEqual(200)
     expect(response.body.gyms).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          title: 'Fitness Gym',
+          title: 'nearby Gym',
         }),
       ]),
     )

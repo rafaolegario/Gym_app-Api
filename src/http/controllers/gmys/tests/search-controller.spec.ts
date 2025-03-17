@@ -1,16 +1,12 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { app } from '@/app'
 import request from 'supertest'
-import { ClearTestDatabase } from '@/utils/tests/clear-test-database'
+
 import { CreateAndAuthenticateUser } from '@/utils/tests/create-and-autenticate-user'
 
 describe('Search gyms controller', () => {
   beforeAll(async () => {
     await app.ready()
-  })
-
-  beforeEach(async () => {
-    await ClearTestDatabase()
   })
 
   afterAll(async () => {
@@ -34,12 +30,10 @@ describe('Search gyms controller', () => {
     const response = await request(app.server)
       .get('/gyms/search')
       .query({
-        query: 'NodeJs',
+        query: 'NodeJs Gym',
       })
       .set('Authorization', `Bearer ${token}`)
       .send()
-
-    console.log(response.body)
 
     expect(response.statusCode).toEqual(200)
     expect(response.body.gyms).toEqual(
