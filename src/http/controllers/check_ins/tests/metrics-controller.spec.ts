@@ -4,7 +4,7 @@ import request from 'supertest'
 import { CreateAndAuthenticateUser } from '@/utils/tests/create-and-autenticate-user'
 import { PrismaClient } from '@prisma/client'
 
-describe('Create checkIns controller', () => {
+describe('Metrics checkIns controller', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -13,7 +13,7 @@ describe('Create checkIns controller', () => {
     await app.close()
   })
 
-  it('should be able to create a checkIn', async () => {
+  it('should be able to get checkIn metrics', async () => {
     const { token } = await CreateAndAuthenticateUser(app)
 
     const prisma = new PrismaClient()
@@ -26,7 +26,7 @@ describe('Create checkIns controller', () => {
       },
     })
 
-    const response = await request(app.server)
+    await request(app.server)
       .post(`/gyms/${gym.id}/check-ins`)
       .set('Authorization', `Bearer ${token}`)
       .send({
@@ -34,6 +34,14 @@ describe('Create checkIns controller', () => {
         userLongitude: -47.8524877,
       })
 
-    expect(response.statusCode).toEqual(201)
+    const response = await request(app.server)
+      .get('/check-ins/metrics')
+      .set('Authorization', `Bearer ${token}`)
+      .send()
+
+    expect(response.statusCode).toEqual(200)
+    expect(response.body).toEqual({
+      checkInsCount: 1,
+    })
   })
 })

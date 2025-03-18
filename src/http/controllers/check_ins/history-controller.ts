@@ -8,7 +8,7 @@ export async function HistoryController(
   reply: FastifyReply,
 ) {
   const HistoryQuerySchema = z.object({
-    page: z.number().min(1).default(1),
+    page: z.coerce.number().min(1).default(1),
   })
 
   const { page } = HistoryQuerySchema.parse(request.query)
@@ -18,5 +18,5 @@ export async function HistoryController(
     page,
   })
 
-  reply.status(200).send({ historyCheckIns })
+  reply.status(200).send(historyCheckIns)
 }

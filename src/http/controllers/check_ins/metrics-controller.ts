@@ -10,5 +10,5 @@ export async function MetricsController(
     userID: request.user.sub,
   })
 
-  reply.status(200).send({ metricsCheckIns })
+  reply.status(200).send(metricsCheckIns)
 }

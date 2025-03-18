@@ -35,7 +35,6 @@ describe('Search nearby controller', () => {
       .set('Authorization', `Bearer ${token}`)
       .send()
 
-    console.log(response.body)
     expect(response.statusCode).toEqual(200)
     expect(response.body.gyms).toEqual(
       expect.arrayContaining([

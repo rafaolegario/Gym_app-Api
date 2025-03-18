@@ -4,7 +4,7 @@ import request from 'supertest'
 import { CreateAndAuthenticateUser } from '@/utils/tests/create-and-autenticate-user'
 import { PrismaClient } from '@prisma/client'
 
-describe('Create checkIns controller', () => {
+describe('History checkIns controller', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -13,11 +13,11 @@ describe('Create checkIns controller', () => {
     await app.close()
   })
 
-  it('should be able to create a checkIn', async () => {
-    const { token } = await CreateAndAuthenticateUser(app)
+  it('should be able to get checkIn history', async () => {
+    const { token, user } = await CreateAndAuthenticateUser(app)
 
     const prisma = new PrismaClient()
-
+    console.log('user', user)
     const gym = await prisma.gym.create({
       data: {
         title: 'Fitness Gym',
@@ -26,14 +26,18 @@ describe('Create checkIns controller', () => {
       },
     })
 
-    const response = await request(app.server)
-      .post(`/gyms/${gym.id}/check-ins`)
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        userLatitude: -22.0141078,
-        userLongitude: -47.8524877,
-      })
+    const checkIn = await prisma.checkIn.create({
+      data: {
+        gym_id: gym.id,
+        user_id: user.id,
+      },
+    })
 
-    expect(response.statusCode).toEqual(201)
+    const response = await request(app.server)
+      .patch(`/check-ins/${checkIn.id}/validate`)
+      .set('Authorization', `Bearer ${token}`)
+      .send()
+
+    expect(response.statusCode).toEqual(204)
   })
 })
