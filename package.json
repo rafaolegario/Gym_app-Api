@@ -28,7 +28,8 @@
     "tsx": "^4.19.3",
     "typescript": "^5.7.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.0.7"
+    "vitest": "^3.0.7",
+    "vitest-environment-prisma": "file:prisma/vitest-environment-prisma"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
