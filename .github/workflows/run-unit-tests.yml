@@ -15,4 +15,7 @@ jobs:
           cache: 'npm'
 
       - run: npm ci
+
+      - run: npx prisma generate # 🔹 Garante que Prisma está atualizado antes dos testes
+
       - run: npm run test
